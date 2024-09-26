@@ -1,18 +1,72 @@
 // eslint-disable-next-line no-undef
-const config = require('../config');
+const config = require('../config.js');
 
-const requestBody = {}
-
-test('', async () => {
-    try {
-		const response = await fetch(`${config.API_URL}/your/endpoint`, {
-			method: 'PUT',
-			headers: {
-			'Content-Type': 'application/json'
+const requestBody = {
+		"name": "My modified kit",
+		"productsList": [
+			{
+				"id": 1,
+				"quantity": 4
 			},
-			body: JSON.stringify(requestBody)
-		});
-	} catch (error) {
-		console.error(error);
+			{
+				"id": 5,
+				"quantity": 2
+			},
+			{
+				"id": 3,
+				"quantity": 1
+			},
+			{
+				"id": 4,
+				"quantity": 1
+			}
+		]
 	}
-});
+
+	test('Status Code 200', async () => {
+		let response;
+		try {
+			response = await fetch(`${config.API_URL}/api/v1/kits/3`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(requestBody)
+			});
+	
+			console.log("Status:", response.status);
+	
+		} catch (error) {
+			console.error('Error:', error);
+		}
+	
+		expect(response.status).toBeDefined();
+		expect(response.status).toBe(200);
+
+		});
+
+
+	test('Kit Successfully Deleted, Expected Response Body', async () => {
+		let response, data;
+	
+		try {
+			response = await fetch(`${config.API_URL}/api/v1/kits/3`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(requestBody)
+			});
+			
+			data = await response.json(); 
+			console.log("Response body:", data);
+	
+		} catch (error) {
+			console.error('Error:', error);
+		}
+		
+		expect(data).toBeDefined();
+		expect(data).toEqual(expect.objectContaining({
+			"ok": true
+		}));
+	});
