@@ -19,8 +19,7 @@ test('Status Code 200', async () => {
 			},
 			body: JSON.stringify(requestBody)
 		});
-	actualStatus = response.status; // Assign status to actualStatus
-    const actualBody = await response.json(); // Also capture the response body for the next test
+	actualStatus = response.status;
     expect(actualStatus).toBeDefined();
     expect(actualStatus).toBe(200);
   } catch (error) {
